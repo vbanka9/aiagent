@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spokes AI Agents | Knowledge26 Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Outfit',sans-serif;background:#061525;color:#e8f4f8;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;}
+    .header-img,.footer-img{width:100%;display:block;flex-shrink:0;}
+    .quiz-card{background:rgba(10,31,51,0.85);border:1px solid rgba(98,216,78,0.15);border-radius:12px;padding:32px 24px;max-width:480px;width:100%;box-shadow:0 2px 8px rgba(0,199,177,0.08);}
+    .quiz-title{font-size:2rem;font-weight:700;color:#62d84e;margin-bottom:16px;text-align:center;}
+    .question{font-size:1.1rem;font-weight:500;color:#e8f4f8;margin-bottom:12px;}
+    .choices{margin-bottom:16px;}
+    .choice-btn{display:block;width:100%;background:linear-gradient(135deg,#62d84e,#00c7b1);color:#061525;font-weight:700;border-radius:10px;padding:12px 24px;margin-bottom:8px;border:none;cursor:pointer;transition:transform .1s;}
+    .choice-btn:hover{transform:translateY(-2px);box-shadow:0 0 8px #62d84e;}
+    .feedback{font-size:1rem;font-weight:600;color:#7a9bb5;margin-bottom:12px;text-align:center;}
+    .score{font-size:1.2rem;font-weight:700;color:#00c7b1;margin-bottom:16px;text-align:center;}
+    .restart-btn{background:linear-gradient(135deg,#62d84e,#00c7b1);color:#061525;font-weight:700;border-radius:10px;padding:12px 24px;border:none;cursor:pointer;display:block;margin:0 auto;}
+    @media(max-width:600px){.quiz-card{padding:16px 8px;}}
+  </style>
+</head>
+<body>
+  <img src="https://cdn.knowledge26.com/spokes/header-banner.png" class="header-img" alt="Header" style="min-height:140px;background:#061525;" />
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
+    <div class="quiz-card">
+      <div class="quiz-title">ServiceNow Release Quiz</div>
+      <div id="question" class="question"></div>
+      <div id="choices" class="choices"></div>
+      <div id="feedback" class="feedback"></div>
+      <div id="score" class="score"></div>
+      <button id="restart" class="restart-btn" style="display:none;">Restart Quiz</button>
+    </div>
+  </div>
+  <img src="https://cdn.knowledge26.com/spokes/footer-banner.png" class="footer-img" alt="Footer" style="min-height:28px;background:#0a1f33;" />
+  <script>
+    const quiz=[
+      {q:"Which ServiceNow release introduced Flow Designer?",a:["London","Madrid","New York","Orlando"],c:1},
+      {q:"What is the codename for the ServiceNow Paris release?",a:["Pasta","Paris","Pineapple","Pancake"],c:3},
+      {q:"Which feature was first available in the ServiceNow Quebec release?",a:["App Engine Studio","Flow Designer","Virtual Agent","Performance Analytics"],c:0},
+      {q:"ServiceNow's first cloud release was called?",a:["Aspen","Berlin","Calgary","Dublin"],c:0},
+      {q:"Which release added Now Mobile app?",a:["London","Madrid","New York","Orlando"],c:2}
+    ];
+    let idx=0,score=0;
+    const qDiv=document.getElementById('question'),cDiv=document.getElementById('choices'),fDiv=document.getElementById('feedback'),sDiv=document.getElementById('score'),rBtn=document.getElementById('restart');
+    function showQ(){
+      qDiv.textContent=quiz[idx].q;
+      cDiv.innerHTML='';
+      quiz[idx].a.forEach((v,i)=>{
+        const b=document.createElement('button');
+        b.textContent=v;
+        b.className='choice-btn';
+        b.onclick=()=>checkA(i);
+        cDiv.appendChild(b);
+      });
+      fDiv.textContent='';
+      sDiv.textContent='';
+      rBtn.style.display='none';
+    }
+    function checkA(i){
+      if(i===quiz[idx].c){
+        fDiv.textContent='Correct!';
+        score++;
+      }else{
+        fDiv.textContent='Incorrect.';
+      }
+      setTimeout(()=>{
+        idx++;
+        if(idx<quiz.length){showQ();}else{showScore();}
+      },900);
+    }
+    function showScore(){
+      qDiv.textContent='Quiz Complete!';
+      cDiv.innerHTML='';
+      fDiv.textContent='';
+      sDiv.textContent='Your score: '+score+' / '+quiz.length;
+      rBtn.style.display='block';
+    }
+    rBtn.onclick=()=>{idx=0;score=0;showQ();};
+    showQ();
+  </script>
+</body>
+</html>
